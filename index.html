@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ada Pesan Khusus Buat Kamu! 💕</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Fredoka', 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffe6f0 0%, #fff0f5 50%, #e6f0ff 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 20px 15px;
+      color: #4a4a4a;
+      position: relative;
+    }
+
+    .bg-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart-bg {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.25);
+      animation: floatUp 8s linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4), 0 5px 15px rgba(0, 0, 0, 0.05);
+      padding: 25px 20px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      border: 3px solid #ffffff;
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h1.title {
+      font-size: 24px;
+      color: #ff4d88;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background: #fff5f8;
+      border: 2px dashed #ffb6c1;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      width: 100%;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .img-wrapper {
+      width: 100%;
+      height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #ffe6ee;
+    }
+
+    .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .slide-caption {
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ff3377;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 40%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      color: #ff4d88;
+      cursor: pointer;
+      z-index: 5;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-prev { left: 10px; }
+    .nav-next { right: 10px; }
+
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 15px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #ffd1dc;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .dot.active {
+      width: 22px;
+      border-radius: 10px;
+      background: #ff4d88;
+    }
+
+    .longtext-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 25px;
+      text-align: left;
+      border: 2px solid #ffe1ec;
+      box-shadow: 0 5px 15px rgba(255, 192, 203, 0.2);
+    }
+
+    .longtext-card h3 {
+      font-size: 16px;
+      color: #ff3377;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .longtext-content {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #555;
+      max-height: 160px;
+      overflow-y: auto;
+      padding-right: 5px;
+      white-space: pre-line;
+    }
+
+    .question-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #d81b60;
+      margin-bottom: 15px;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      min-height: 60px;
+      position: relative;
+    }
+
+    .btn-yes {
+      background: linear-gradient(45deg, #ff4d88, #ff758c);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(255, 77, 136, 0.4);
+    }
+
+    .btn-no {
+      background: #f0f0f0;
+      color: #777;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+    }
+
+    .custom-trigger {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #ffb6c1;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ff3377;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-content {
+      background: white;
+      width: 100%; max-width: 440px; max-height: 85vh;
+      border-radius: 24px; padding: 20px; overflow-y: auto; text-align: left;
+    }
+
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+    }
+    .modal-header h2 { font-size: 18px; color: #ff3377; }
+    .close-modal { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #666; margin-bottom: 4px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px; border: 1.5px solid #ffd1dc; border-radius: 12px; font-size: 13px; outline: none;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn-save { width: 100%; background: #ff4d88; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+    .success-screen { display: none; }
+    .success-screen h2 { color: #ff3377; font-size: 24px; margin-bottom: 10px; }
+    .success-screen p { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.5; }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 8px; background: #25d366; color: white;
+      text-decoration: none; padding: 12px 24px; border-radius: 50px; font-weight: 700; font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-hearts" id="heartContainer"></div>
+  <button class="custom-trigger" onclick="openModal()">Custom Foto & Pesan ⚙️</button>
+
+  <div class="container">
+    <div id="mainView">
+      <h1 class="title">Ada Pesan Buat Kamu! 💌</h1>
+      <p class="subtitle">Geser foto-foto di bawah ini yaa...</p>
+
+      <div class="carousel-container">
+        <button class="nav-btn nav-prev" onclick="prevSlide()">❮</button>
+        <button class="nav-btn nav-next" onclick="nextSlide()">❯</button>
+        <div class="carousel-track" id="carouselTrack"></div>
+      </div>
+      <div class="dots-container" id="dotsContainer"></div>
+
+      <div class="longtext-card">
+        <h3><span>💖</span> Spesial Surat Buat Kamu</h3>
+        <div class="longtext-content" id="displayLongText"></div>
+      </div>
+
+      <div class="question-title">Mau gak jadi pacar aku? 🥺👉👈</div>
+      <div class="btn-group">
+        <button class="btn-yes" onclick="handleYes()">Mau Banget! 💕</button>
+        <button class="btn-no" id="btnNo" onmouseover="moveNoBtn()" onclick="moveNoBtn()" ontouchstart="moveNoBtn()">Engga Ah 😜</button>
+      </div>
+    </div>
+
+    <div class="success-screen" id="successView">
+      <div style="font-size: 60px; margin-bottom: 10px;">🎉💖🥳</div>
+      <h2>YAYYY! I LOVE YOU! 💕</h2>
+      <p id="displaySuccessMsg">Makasih udah mau terima aku! Janji deh bakal bikin kamu bahagia terus tiap hari 🥰✨</p>
+      <a href="#" id="waLink" target="_blank" class="btn-wa">Kirim Balasan ke WA 📲</a>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Kustomisasi Isi Website</h2>
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+      </div>
+      
+      <div class="form-group">
+        <label>Nomor WhatsApp (Contoh: 6282371338944)</label>
+        <input type="text" id="inputWa" />
+      </div>
+
+      <div class="form-group">
+        <label>Pesan Surat Long Text Gombalan</label>
+        <textarea id="inputLongText"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Pesan Balasan WA Saat Diterima</label>
+        <input type="text" id="inputReplyMsg" />
+      </div>
+
+      <hr style="margin: 15px 0; border: none; border-top: 1px dashed #ffd1dc;" />
+      <p style="font-size: 12px; font-weight: 700; color: #ff3377; margin-bottom: 10px;">Ganti Foto & Caption Slide:</p>
+      <div id="slideInputs"></div>
+
+      <button class="btn-save" onclick="saveCustomData()">Simpan Perubahan ✨</button>
+    </div>
+  </div>
+
+  <script>
+    const defaultData = {
+      waNumber: "6282371338944",
+      replyMsg: "Iya aku mau jadi pacar kamu! 💕🥰",
+      longText: `Halo Si Paling Gemes! 💐✨
+
+Jujur ya, aku udah coba nahan-nahan buat nggak kelihatan salting kalau di deket kamu... tapi ternyata gagal total. Muka kamu itu terlalu berbahaya buat kesehatan jantung aku! 🚑💨
+
+Kamu tau nggak bedanya kamu sama kuah bakso? Kalau kuah bakso bikin kenyang, kalau kamu bikin aku pengen melayang tiap kali liat senyum kamu. Agak lebay sih, tapi beneran tau! 😂
+
+Aku tuh bingung, kamu pakenya pelet jenis apa sih? Kok bisa-bisanya pikiran aku diisi muka kamu terus 24/7 tanpa henti.
+
+Intinya... aku udah capek cuma jadi penonton story kamu. Hari ini, lewat website penuh cinta ini, aku mau minta kamu jadi pacar aku! 🥺👉👈`,
+      slides: [
+        {
+          img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500",
+          caption: "Awalnya cuma iseng ngeliatin, eh kok bikin ketagihan... 🫣"
+        },
+        {
+          img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
+          caption: "Bisa pelan-pelan nggak lucunya? Jantung aku capek! 💓"
+        },
+        {
+          img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500",
+          caption: "Tolong bertanggung jawab atas rasa kangen ini! 🚨"
+        },
+        {
+          img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500",
+          caption: "Terverifikasi resmi: Manusia tergemes versi aku 🏆"
+        }
+      ]
+    };
+
+    let appData = JSON.parse(localStorage.getItem('confess_data')) || defaultData;
+    let currentSlide = 0;
+
+    function initApp() {
+      renderCarousel();
+      document.getElementById('displayLongText').innerText = appData.longText;
+      createHearts();
+    }
+
+    function renderCarousel() {
+      const track = document.getElementById('carouselTrack');
+      const dotsContainer = document.getElementById('dotsContainer');
+      track.innerHTML = '';
+      dotsContainer.innerHTML = '';
+
+      appData.slides.forEach((slide, idx) => {
+        const slideEl = document.createElement('div');
+        slideEl.className = 'slide';
+        slideEl.innerHTML = `
+          <div class="img-wrapper">
+            <img src="${slide.img}" alt="Foto ${idx + 1}" />
+          </div>
+          <div class="slide-caption">${slide.caption}</div>
+        `;
+        track.appendChild(slideEl);
+
+        const dot = document.createElement('div');
+        dot.className = `dot ${idx === currentSlide ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(idx);
+        dotsContainer.appendChild(dot);
+      });
+      updateSlidePosition();
+    }
+
+    function updateSlidePosition() {
+      const track = document.getElementById('carouselTrack');
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => { dot.classList.toggle('active', idx === currentSlide); });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % appData.slides.length;
+      updateSlidePosition();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + appData.slides.length) % appData.slides.length;
+      updateSlidePosition();
+    }
+
+    function goToSlide(idx) {
+      currentSlide = idx;
+      updateSlidePosition();
+    }
+
+    function moveNoBtn() {
+      const btnNo = document.getElementById('btnNo');
+      const x = Math.random() * (window.innerWidth - 120) - (window.innerWidth / 2 - 60);
+      const y = Math.random() * (window.innerHeight - 120) - (window.innerHeight / 2 - 60);
+      btnNo.style.position = 'fixed';
+      btnNo.style.left = `calc(50% + ${x}px)`;
+      btnNo.style.top = `calc(50% + ${y}px)`;
+    }
+
+    function handleYes() {
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      document.getElementById('mainView').style.display = 'none';
+      document.getElementById('successView').style.display = 'block';
+      const waUrl = `https://wa.me/${appData.waNumber}?text=${encodeURIComponent(appData.replyMsg)}`;
+      document.getElementById('waLink').href = waUrl;
+    }
+
+    function createHearts() {
+      const container = document.getElementById('heartContainer');
+      const hearts = ['💖', '💗', '🌸', '✨', '💕'];
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-bg';
+        heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (6 + Math.random() * 6) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.style.fontSize = (16 + Math.random() * 20) + 'px';
+        container.appendChild(heart);
+      }
+    }
+
+    function openModal() {
+      document.getElementById('inputWa').value = appData.waNumber;
+      document.getElementById('inputLongText').value = appData.longText;
+      document.getElementById('inputReplyMsg').value = appData.replyMsg;
+
+      const slideInputs = document.getElementById('slideInputs');
+      slideInputs.innerHTML = '';
+      appData.slides.forEach((slide, idx) => {
+        slideInputs.innerHTML += `
+          <div style="background: #fff0f5; padding: 10px; border-radius: 12px; margin-bottom: 10px;">
+            <label>Caption Foto ${idx + 1}</label>
+            <input type="text" id="caption_${idx}" value="${slide.caption}" style="margin-bottom: 6px;" />
+            <label>Ganti Foto ${idx + 1}</label>
+            <input type="file" accept="image/*" onchange="handleImageUpload(event, ${idx})" />
+          </div>
+        `;
+      });
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    function handleImageUpload(e, idx) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          appData.slides[idx].img = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function saveCustomData() {
+      appData.waNumber = document.getElementById('inputWa').value;
+      appData.longText = document.getElementById('inputLongText').value;
+      appData.replyMsg = document.getElementById('inputReplyMsg').value;
+      appData.slides.forEach((_, idx) => {
+        const cap = document.getElementById(`caption_${idx}`).value;
+        if (cap) appData.slides[idx].caption = cap;
+      });
+      localStorage.setItem('confess_data', JSON.stringify(appData));
+      closeModal();
+      initApp();
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
